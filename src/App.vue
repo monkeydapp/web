@@ -1,24 +1,61 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <section>
+    <!-- <NavBar /> -->
+    <div class="container">
+      <div class="columns is-mobile">
+        <div class="column">
+          <AppCard />
+        </div>
+        <div class="column">
+          <AppCard />
+        </div>
+        <div class="column">
+          <AppCard />
+        </div>
+        <div class="column">
+          <AppCard />
+        </div>
+        <div class="column">
+          <AppCard />
+        </div>
+      </div>
+      <div class="columns is-mobile">
+        <div class="column">
+          <AppCard />
+        </div>
+        <div class="column">
+          <AppCard />
+        </div>
+        <div class="column">
+          <AppCard />
+        </div>
+        <div class="column">
+          <AppCard />
+        </div>
+        <div class="column">
+          <AppCard />
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import NavBar from "./components/NavBar.vue";
+import AppCard from "./components/AppCard.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    HelloWorld
+    NavBar,
+    AppCard
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
