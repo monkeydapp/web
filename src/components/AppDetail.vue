@@ -116,11 +116,6 @@ export default {
       });
     },
     async deploy() {
-      // let [kncAddress, kncContract] = await deployContract(bytecode, abi, []);
-      // console.log("KyberNetworkCrystal: ", kncAddress);
-      // this.$axios.get("/hub/erc20/monkeyfile").then(response => {
-      //   new MonkeyEngine(response.data).parse();
-      // });
       await this.me.deploy();
     }
   }
