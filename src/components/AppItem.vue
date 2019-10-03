@@ -9,7 +9,6 @@
       <div class="content">
         <p>
           <strong>{{ item.name }}</strong>
-          <!-- <small>@hub/{{ item.id }}</small> -->
           <b-tag>Community</b-tag>
           <br />
           {{ item.desc }}
@@ -49,15 +48,7 @@ export default {
   },
   methods: {
     getImgUrl() {
-      return `/hub/${this.item.id}/card.jpg`;
-    },
-    cardModal() {
-      this.$buefy.modal.open({
-        parent: this,
-        component: AppDetail,
-        hasModalCard: true,
-        width: "100%"
-      });
+      return `/hub/${this.$props.item.id}/card.jpg`;
     },
     onLikeClick(event) {
       this.$emit("liked", this.$props.item.id);

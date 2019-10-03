@@ -4,24 +4,17 @@
       <article class="media">
         <figure class="media-left">
           <p class="image is-128x128">
-            <img src="/hub/uniswap/card.jpg" />
+            <img :src="getImgUrl()" />
           </p>
         </figure>
         <div class="media-content">
           <div class="content">
-            <h3>Uniswap</h3>
-
-            <p>
-              Uniswap is a protocol for automated token exchange on Ethereum.
-              A simple smart contract interface for swapping ERC20 tokens
-              A formalized model for pooling liquidity reserves
-              An open source frontend interface for traders and liquidity providers
-              A commitment to free and decentralized asset exchange
-            </p>
+            <h3>{{ item.name }}</h3>
+            <p>{{item.desc}}</p>
           </div>
         </div>
         <div class="media-right">
-          <b-button type="is-text" size="is-large" icon-left="heart" @click="onViewClick"></b-button>
+          <b-button type="is-text" size="is-large" icon-left="heart" @click="onLikeClick"></b-button>
         </div>
       </article>
     </div>
@@ -77,7 +70,7 @@
           </div>
         </b-tab-item>
         <b-tab-item label="Deploy" icon="download">
-          <b-field v-for="(item, index) in items" v-bind:key="index" horizontal>
+          <b-field v-for="(item, index) in params" v-bind:key="index" horizontal>
             <template slot="label">
               {{ item }}
               <b-tooltip type="is-dark" label="Help text here for explanation">
@@ -92,7 +85,11 @@
             </p>
           </b-field>
         </b-tab-item>
-        <b-tab-item label="Instance" icon="briefcase"></b-tab-item>
+        <b-tab-item label="Instance" icon="briefcase" :disabled="!instance.length">
+          <div v-for="(item, index) in instance" v-bind:key="index" class="field">
+            <b-checkbox :native-value="true">{{item.name}} deployed at {{item.address}}</b-checkbox>
+          </div>
+        </b-tab-item>
       </b-tabs>
       <b-loading :is-full-page="false" :active.sync="isDeploying"></b-loading>
     </div>
@@ -154,7 +151,7 @@ class MonkeyEngine {
     }
   }
 
-  async deploy() {
+  async deploy(onProgress) {
     let lines = this.script.split("\n");
     let lc = lines.length;
 
@@ -166,16 +163,20 @@ class MonkeyEngine {
         const params = eval(lines[++i]);
         let [address, contract] = await deployContract(bytecode, abi, params);
         this.env[p] = address;
-        console.log(`${p} contract address: ${address}`);
+        onProgress(p, address, false);
       }
     }
   }
 }
 
 export default {
+  props: {
+    item: Object
+  },
   data() {
     return {
-      items: [],
+      instance: [],
+      params: [],
       env: {},
       activeTab: 1,
       isDeploying: false,
@@ -184,20 +185,33 @@ export default {
   },
   created() {
     this.getDataFromApi();
+    this.instance = this.$props.item.instance;
   },
   methods: {
+    getImgUrl() {
+      return `/hub/${this.$props.item.id}/card.jpg`;
+    },
     getDataFromApi() {
-      this.$axios.get("/hub/erc20/monkeyfile").then(response => {
-        this.me = new MonkeyEngine(response.data);
-        this.me.parse();
-        this.items = this.me.params;
-        this.env = this.me.env;
-      });
+      this.$axios
+        .get(`/hub/${this.$props.item.id}/monkeyfile`)
+        .then(response => {
+          this.me = new MonkeyEngine(response.data);
+          this.me.parse();
+          this.params = this.me.params;
+          this.env = this.me.env;
+        });
+    },
+    onLikeClick(event) {
+      this.$emit("liked", this.$props.item.id);
     },
     async deploy() {
       this.activeTab = 2;
       this.isDeploying = true;
-      await this.me.deploy();
+      let that = this;
+      await this.me.deploy(function(name, address, error) {
+        that.instance.push({ name, address });
+      });
+      this.$emit("deployed", this.$props.item.id, this.instance);
       this.isDeploying = false;
     }
   }

@@ -57,8 +57,8 @@
       </div>
     </div>
 
-    <b-modal :active.sync="isViewModalActive" width="90%" can-cancel="x">
-      <AppDetail />
+    <b-modal :active.sync="isViewModalActive" width="90%" :can-cancel="['x']">
+      <AppDetail :item="detail" @liked="onLikeClick" @deployed="onDeployed" />
     </b-modal>
   </section>
 </template>
@@ -81,7 +81,9 @@ export default {
       items: [],
       liked: [],
       installed: [],
+      instances: {},
       logs: "",
+      detail: null,
       rpcServer: "http://127.0.0.1:7545",
       privateKey:
         "0xcc90ad96b5bac509225d6d429e030428b90777c73c6b958826933d489b6c8f9b"
@@ -110,18 +112,28 @@ export default {
         this.items = response.data;
       });
     },
-    onLikeClick(value) {
-      if (this.liked.includes(value)) {
-        var index = this.liked.indexOf(value);
+    onLikeClick(id) {
+      if (this.liked.includes(id)) {
+        var index = this.liked.indexOf(id);
         if (index > -1) {
           this.liked.splice(index, 1);
         }
       } else {
-        this.liked.push(value);
+        this.liked.push(id);
       }
     },
-    onViewClick(value) {
+    onViewClick(id) {
+      for (let i in this.items) {
+        if (this.items[i].id == id) {
+          this.detail = this.items[i];
+          this.detail.instance = this.instances[id];
+        }
+      }
       this.isViewModalActive = true;
+    },
+    onDeployed(id, instance) {
+      this.installed.push(id);
+      this.instances[id] = instance;
     },
     check() {
       const Web3 = require("web3");
