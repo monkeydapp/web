@@ -121,41 +121,15 @@
 
 <script>
 const Web3 = require("web3");
-const rpcUrl = "https://testnet2.matic.network";
-const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
-const gasPrice = 0;
-const chainId = 8995;
-
-const senderPk =
-  "cc90ad96b5bac509225d6d429e030428b90777c73c6b958826933d489b6c8f9b";
-const sender = web3.eth.accounts.privateKeyToAccount(senderPk).address;
-
-async function sendTx(txObject) {
-  const to = txObject._parent.options.address;
-  const data = txObject.encodeABI();
-  const from = sender;
-  const gas = 5000000;
-  const nonce = await web3.eth.getTransactionCount(sender);
-  const tx = { from, to, nonce, data, gas, chainId, gasPrice };
-  const signedTx = await web3.eth.accounts.signTransaction(tx, senderPk);
-  return web3.eth.sendSignedTransaction(signedTx.rawTransaction, {
-    from: sender
-  });
-}
-
-async function deployContract(bytecode, abi, ctorArgs) {
-  const contract = new web3.eth.Contract(abi);
-  const deploy = contract.deploy({
-    data: "0x" + bytecode,
-    arguments: ctorArgs
-  });
-  const tx = await sendTx(deploy);
-  contract.options.address = tx.contractAddress;
-  return [tx.contractAddress, contract];
-}
 
 class MonkeyEngine {
-  constructor(script) {
+  constructor(rpcUrl, privateKey, gasPrice, script) {
+    this.web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+    this.senderPk = privateKey;
+    this.sender = this.web3.eth.accounts.privateKeyToAccount(
+      privateKey
+    ).address;
+    this.gasPrice = gasPrice;
     this.script = script;
   }
 
@@ -174,7 +148,7 @@ class MonkeyEngine {
     }
   }
 
-  async deploy(onProgress) {
+  async run(onProgress) {
     let lines = this.script.split("\n");
     let lc = lines.length;
 
@@ -184,17 +158,53 @@ class MonkeyEngine {
         const bytecode = lines[++i];
         const abi = eval(lines[++i]);
         const params = eval(lines[++i]);
-        let [address, contract] = await deployContract(bytecode, abi, params);
+        let [address, contract] = await this.deployContract(
+          bytecode,
+          abi,
+          params
+        );
         this.env[p] = address;
         onProgress(p, address);
       }
     }
   }
+
+  async sendTx(txObject) {
+    const to = txObject._parent.options.address;
+    const data = txObject.encodeABI();
+    const from = this.sender;
+    const gas = 5000000;
+    const gasPrice = this.gasPrice;
+    const nonce = await this.web3.eth.getTransactionCount(this.sender);
+    const chainId = await this.web3.eth.net.getId();
+    const tx = { from, to, nonce, data, gas, chainId, gasPrice };
+    const signedTx = await this.web3.eth.accounts.signTransaction(
+      tx,
+      this.senderPk
+    );
+    return this.web3.eth.sendSignedTransaction(signedTx.rawTransaction, {
+      from: this.sender
+    });
+  }
+
+  async deployContract(bytecode, abi, ctorArgs) {
+    const contract = new this.web3.eth.Contract(abi);
+    const deploy = contract.deploy({
+      data: "0x" + bytecode,
+      arguments: ctorArgs
+    });
+    const tx = await this.sendTx(deploy);
+    contract.options.address = tx.contractAddress;
+    return [tx.contractAddress, contract];
+  }
 }
 
 export default {
   props: {
-    item: Object
+    item: Object,
+    rpcServer: String,
+    privateKey: String,
+    gasPrice: Number
   },
   data() {
     return {
@@ -224,7 +234,12 @@ export default {
       this.$axios
         .get(`/hub/${this.$props.item.id}/monkeyfile`)
         .then(response => {
-          this.me = new MonkeyEngine(response.data);
+          this.me = new MonkeyEngine(
+            this.$props.rpcServer,
+            this.$props.privateKey,
+            parseInt(this.$props.gasPrice),
+            response.data
+          );
           this.me.parse();
           this.params = this.me.params;
           this.env = this.me.env;
@@ -239,7 +254,7 @@ export default {
       this.isDeploying = true;
       let that = this;
       try {
-        await this.me.deploy(function(name, address) {
+        await this.me.run(function(name, address) {
           that.newInstance.push({ type: "deploy", name, address });
         });
         this.instances.push(this.newInstance);

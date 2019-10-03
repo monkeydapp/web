@@ -8,20 +8,16 @@
             <figure class="image">
               <img src="/logo.jpg" alt="Placeholder image" />
             </figure>
-            <br />
-            <br />
-            <b-field label="RPC Server">
-              <b-input v-model="rpcServer" required></b-input>
+            <b-field grouped style="margin-top: 30px">
+              <b-field label="RPC Server">
+                <b-input v-model="rpcServer" required></b-input>
+              </b-field>
+              <b-field label="Gas price" expanded>
+                <b-input type="number" v-model="gasPrice" min="0" required></b-input>
+              </b-field>
             </b-field>
             <b-field label="Private key">
               <b-input type="password" v-model="privateKey" required password-reveal></b-input>
-            </b-field>
-            <button @click="check()" class="button is-primary">Check</button>
-            <br />
-            <br />
-
-            <b-field label="Log">
-              <b-input v-model="logs" type="textarea"></b-input>
             </b-field>
           </div>
         </div>
@@ -58,7 +54,14 @@
     </div>
 
     <b-modal :active.sync="isViewModalActive" width="90%" :can-cancel="['x']">
-      <AppDetail :item="detail" @liked="onLikeClick" @deployed="onDeployed" />
+      <AppDetail
+        :rpcServer="rpcServer"
+        :privateKey="privateKey"
+        :gasPrice="parseInt(gasPrice)"
+        :item="detail"
+        @liked="onLikeClick"
+        @deployed="onDeployed"
+      />
     </b-modal>
   </section>
 </template>
@@ -87,7 +90,8 @@ export default {
       detail: null,
       rpcServer: "http://127.0.0.1:7545",
       privateKey:
-        "0xcc90ad96b5bac509225d6d429e030428b90777c73c6b958826933d489b6c8f9b"
+        "0xcc90ad96b5bac509225d6d429e030428b90777c73c6b958826933d489b6c8f9b",
+      gasPrice: 0
     };
   },
   computed: {
