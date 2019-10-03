@@ -4,7 +4,7 @@
       <div class="columns">
         <div class="column is-one-third">
           <div class="sticky">
-            <figure class="image">
+            <figure class="image" style="padding-top: 30px">
               <img src="/logo.jpg" alt="Placeholder image" />
             </figure>
             <b-field grouped style="margin-top: 30px">
@@ -170,10 +170,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  padding-top: 32px;
 }
 .sticky {
   position: sticky;
+  top: 0px;
 }
 .modal .modal-content {
   height: 100%;

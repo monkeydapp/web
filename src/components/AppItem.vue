@@ -9,7 +9,8 @@
       <div class="content">
         <p>
           <strong>{{ item.name }}</strong>
-          <b-tag>Community</b-tag>
+          <b-tag v-if="item.available">Community</b-tag>
+          <b-tag v-if="!item.available">Coming soon</b-tag>
           <br />
           {{ item.desc }}
         </p>
@@ -17,18 +18,24 @@
       <nav class="level is-mobile">
         <div class="level-left">
           <b-taglist>
-            <b-tag type="is-primary">Matic</b-tag>
-            <b-tag type="is-primary">Ganache</b-tag>
-            <b-tag type="is-info">Rinkeby</b-tag>
-            <b-tag type="is-info">Ropsten</b-tag>
-            <b-tag type="is-warning">Poa</b-tag>
-            <b-tag type="is-danger">Mainnet</b-tag>
+            <b-tag :type="item.available ? 'is-primary' : ''">Matic</b-tag>
+            <b-tag :type="item.available ? 'is-primary' : ''">Ganache</b-tag>
+            <b-tag :type="item.available ? 'is-info' : ''">Rinkeby</b-tag>
+            <b-tag :type="item.available ? 'is-info' : ''">Ropsten</b-tag>
+            <b-tag :type="item.available ? 'is-warning' : ''">Poa</b-tag>
+            <b-tag :type="item.available ? 'is-danger' : ''">Mainnet</b-tag>
           </b-taglist>
         </div>
       </nav>
     </div>
     <div class="media-right">
-      <b-button type="is-link" size="is-medium" icon-left="download" @click="onViewClick"></b-button>
+      <b-button
+        v-if="item.available"
+        type="is-link"
+        size="is-medium"
+        icon-left="download"
+        @click="onViewClick"
+      ></b-button>
     </div>
   </article>
 </template>

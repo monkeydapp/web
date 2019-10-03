@@ -30,7 +30,7 @@
                   <tr>
                     <td class="strong">Website</td>
                     <td>
-                      <a href="https://uniswap.io/" target="_blank">https://uniswap.io/</a>
+                      <a :href="item.website" target="_blank">{{item.website}}</a>
                     </td>
                   </tr>
                   <tr>

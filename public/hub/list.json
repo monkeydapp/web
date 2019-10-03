@@ -2,25 +2,50 @@
   {
     "id": "erc20",
     "name": "ERC-20",
-    "desc": "ERC-20 is a technical standard used for smart contracts on the Ethereum blockchain for implementing tokens",
-    "status": "Available"
+    "website": "https://eips.ethereum.org/EIPS/eip-20",
+    "desc": "ERC-20 is a technical standard used for smart contracts on the Ethereum blockchain for implementing tokens. ERC-20 defines a common list of rules for Ethereum tokens to follow within the larger Ethereum ecosystem, allowing developers to accurately predict interaction between tokens.",
+    "available": 1
   },
   {
     "id": "erc721",
     "name": "ERC-721",
-    "desc": "ERC721 tokens, more commonly referred to as Non-Fungible tokens (NFTs) ",
-    "status": "Available"
+    "website": "https://eips.ethereum.org/EIPS/eip-721",
+    "desc": "ERC-721 is a free, open standard that describes how to build non-fungible or unique tokens on the Ethereum blockchain. While most tokens are fungible (every token is the same as every other token), ERC-721 tokens are all unique.",
+    "available": 1
   },
   {
     "id": "uniswap",
     "name": "Uniswap",
-    "desc": "Uniswap is a protocol for automated token exchange on Ethereum.",
-    "status": "Available"
+    "website": "https://uniswap.io/",
+    "desc": "Designed with simplicity in mind, the Uniswap protocol provides an interface for seamless exchange of ERC20 tokens on Ethereum. By eliminating unnecessary forms of rent extraction and middlemen it allows faster, more efficient exchange. Where it makes tradeoffs, decentralization, censorship resistance, and security are prioritized.",
+    "available": 1
   },
   {
     "id": "kyber",
     "name": "Kyber Network",
+    "website": "https://kyber.network/",
     "desc": "Kyber is an on-chain liquidity protocol that aggregates liquidity from a wide range of reserves, powering instant and secure token exchange in any decentralized application.",
-    "status": "Coming soon"
+    "available": 0
+  },
+  {
+    "id": "0x",
+    "name": "0x",
+    "website": "https://0x.org/",
+    "desc": "Powering Decentralized Exchange. 0x is an open protocol that enables the peer-to-peer exchange of assets on the Ethereum blockchain.",
+    "available": 0
+  },
+  {
+    "id": "bzx",
+    "name": "b0x Network",
+    "website": "https://bzx.network",
+    "desc": "A protocol for next generation (b)0x-standard relays. The first decentralized margin lending protocol on the Ethereum mainnet.",
+    "available": 0
+  },
+  {
+    "id": "cryptozombies",
+    "name": "CryptoZombies",
+    "website": "https://cryptozombies.io",
+    "desc": "CryptoZombies is an interactive code school that teaches you to write smart contracts in Solidity through building your own crypto-collectables game.",
+    "available": 0
   }
 ]
