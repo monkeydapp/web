@@ -51,6 +51,7 @@
                 @view="onViewClick"
               />
             </b-tab-item>
+            <b-tab-item label="Monkeyfile" icon="script" :disabled="true"></b-tab-item>
           </b-tabs>
         </div>
       </div>
@@ -104,6 +105,10 @@ export default {
     }
   },
   created() {
+    let liked = localStorage.getItem("liked");
+    if (liked) {
+      this.liked = JSON.parse(liked);
+    }
     this.getDataFromApi();
   },
   methods: {
@@ -124,20 +129,21 @@ export default {
       } else {
         this.liked.push(id);
       }
+      localStorage.setItem("liked", JSON.stringify(this.liked));
     },
     onViewClick(id) {
       for (let i in this.items) {
         if (this.items[i].id == id) {
           this.detail = this.items[i];
-          this.detail.instance = this.instances[id];
+          this.detail.instances = this.instances[id];
           this.detail.isLiked = this.liked.includes(id);
         }
       }
       this.isViewModalActive = true;
     },
-    onDeployed(id, instance) {
+    onDeployed(id, instances) {
       this.installed.push(id);
-      this.instances[id] = instance;
+      this.instances[id] = instances;
     },
     check() {
       const Web3 = require("web3");

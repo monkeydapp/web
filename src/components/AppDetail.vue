@@ -87,10 +87,31 @@
             </p>
           </b-field>
         </b-tab-item>
-        <b-tab-item label="Instance" icon="briefcase" :disabled="!instance.length">
-          <div v-for="(item, index) in instance" v-bind:key="index" class="field">
-            <b-checkbox :native-value="true">{{item.name}} deployed at {{item.address}}</b-checkbox>
-          </div>
+        <b-tab-item label="Instances" icon="briefcase" :disabled="!instances.length">
+          <b-message v-for="(instance, index) in instances" v-bind:key="index" type="is-success">
+            <ul>
+              <li v-for="(item, index) in instance" v-bind:key="index" class="field">
+                <strong>{{item.name}}</strong> deployed at
+                <strong>{{item.address}}</strong>
+              </li>
+            </ul>
+          </b-message>
+          <b-message
+            v-if="newInstance.length"
+            :type="newInstance[newInstance.length -1].type == 'error' ? 'is-danger' : 'is-info'"
+          >
+            <ul>
+              <li v-for="(item, index) in newInstance" v-bind:key="index" class="field">
+                <p v-if="item.type == 'deploy'">
+                  <strong>{{item.name}}</strong> deployed at
+                  <strong>{{item.address}}</strong>
+                </p>
+                <p v-if="item.type == 'error'">
+                  <strong>{{item.err}}</strong>
+                </p>
+              </li>
+            </ul>
+          </b-message>
         </b-tab-item>
       </b-tabs>
       <b-loading :is-full-page="false" :active.sync="isDeploying"></b-loading>
@@ -100,10 +121,10 @@
 
 <script>
 const Web3 = require("web3");
-const rpcUrl = "http://127.0.0.1:7545";
+const rpcUrl = "https://testnet2.matic.network";
 const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
 const gasPrice = 0;
-const chainId = 5777;
+const chainId = 8995;
 
 const senderPk =
   "cc90ad96b5bac509225d6d429e030428b90777c73c6b958826933d489b6c8f9b";
@@ -165,7 +186,7 @@ class MonkeyEngine {
         const params = eval(lines[++i]);
         let [address, contract] = await deployContract(bytecode, abi, params);
         this.env[p] = address;
-        onProgress(p, address, false);
+        onProgress(p, address);
       }
     }
   }
@@ -177,7 +198,8 @@ export default {
   },
   data() {
     return {
-      instance: [],
+      instances: [],
+      newInstance: [],
       params: [],
       env: {},
       activeTab: 1,
@@ -187,8 +209,8 @@ export default {
     };
   },
   created() {
-    if (this.$props.item.instance) {
-      this.instance = this.$props.item.instance;
+    if (this.$props.item.instances) {
+      this.instances = this.$props.item.instances;
       this.activeTab = 2;
     }
     this.isLiked = this.$props.item.isLiked;
@@ -216,10 +238,16 @@ export default {
       this.activeTab = 2;
       this.isDeploying = true;
       let that = this;
-      await this.me.deploy(function(name, address, error) {
-        that.instance.push({ name, address });
-      });
-      this.$emit("deployed", this.$props.item.id, this.instance);
+      try {
+        await this.me.deploy(function(name, address) {
+          that.newInstance.push({ type: "deploy", name, address });
+        });
+        this.instances.push(this.newInstance);
+        this.newInstance = [];
+        this.$emit("deployed", this.$props.item.id, this.instances);
+      } catch (e) {
+        that.newInstance.push({ type: "error", err: e.toString() });
+      }
       this.isDeploying = false;
     }
   }
