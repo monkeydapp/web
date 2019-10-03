@@ -1,5 +1,5 @@
 <template>
-  <div class="card" style="height: 100%">
+  <div class="card" style="height: 100%; overflow-y: scroll;">
     <div class="card-content">
       <article class="media">
         <figure class="media-left">
@@ -14,7 +14,9 @@
           </div>
         </div>
         <div class="media-right">
-          <b-button type="is-text" size="is-large" icon-left="heart" @click="onLikeClick"></b-button>
+          <span style="cursor: pointer" @click="onLikeClick">
+            <b-icon icon="heart" :type="isLiked ? 'is-primary' : ''"></b-icon>
+          </span>
         </div>
       </article>
     </div>
@@ -179,13 +181,18 @@ export default {
       params: [],
       env: {},
       activeTab: 1,
+      isLiked: false,
       isDeploying: false,
       me: null
     };
   },
   created() {
+    if (this.$props.item.instance) {
+      this.instance = this.$props.item.instance;
+      this.activeTab = 2;
+    }
+    this.isLiked = this.$props.item.isLiked;
     this.getDataFromApi();
-    this.instance = this.$props.item.instance;
   },
   methods: {
     getImgUrl() {
@@ -202,6 +209,7 @@ export default {
         });
     },
     onLikeClick(event) {
+      this.isLiked = !this.isLiked;
       this.$emit("liked", this.$props.item.id);
     },
     async deploy() {

@@ -26,13 +26,12 @@
           </div>
         </div>
         <div class="column">
-          <b-tabs type="is-boxed" class="block">
+          <b-tabs type="is-boxed" class="block" v-model="activeTab">
             <b-tab-item label="All" icon="view-list">
               <AppItem
                 v-for="(item, index) in items"
                 v-bind:key="index"
                 :item="item"
-                @liked="onLikeClick"
                 @view="onViewClick"
               />
             </b-tab-item>
@@ -41,7 +40,7 @@
                 v-for="(item, index) in likedItems"
                 v-bind:key="index"
                 :item="item"
-                @liked="onLikeClick"
+                @view="onViewClick"
               />
             </b-tab-item>
             <b-tab-item label="Installed" icon="download" :disabled="!installed.length">
@@ -49,7 +48,7 @@
                 v-for="(item, index) in installedItems"
                 v-bind:key="index"
                 :item="item"
-                @liked="onLikeClick"
+                @view="onViewClick"
               />
             </b-tab-item>
           </b-tabs>
@@ -77,6 +76,7 @@ export default {
   },
   data() {
     return {
+      activeTab: 0,
       isViewModalActive: false,
       items: [],
       liked: [],
@@ -117,6 +117,9 @@ export default {
         var index = this.liked.indexOf(id);
         if (index > -1) {
           this.liked.splice(index, 1);
+          if (this.liked.length == 0 && this.activeTab == 1) {
+            this.activeTab = 0;
+          }
         }
       } else {
         this.liked.push(id);
@@ -127,6 +130,7 @@ export default {
         if (this.items[i].id == id) {
           this.detail = this.items[i];
           this.detail.instance = this.instances[id];
+          this.detail.isLiked = this.liked.includes(id);
         }
       }
       this.isViewModalActive = true;

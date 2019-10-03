@@ -16,11 +16,6 @@
       </div>
       <nav class="level is-mobile">
         <div class="level-left">
-          <a class="level-item" @click="onLikeClick">
-            <span class="icon is-small">
-              <i class="fas fa-heart"></i>
-            </span>
-          </a>
           <b-taglist>
             <b-tag type="is-primary">Matic</b-tag>
             <b-tag type="is-primary">Ganache</b-tag>
@@ -49,9 +44,6 @@ export default {
   methods: {
     getImgUrl() {
       return `/hub/${this.$props.item.id}/card.jpg`;
-    },
-    onLikeClick(event) {
-      this.$emit("liked", this.$props.item.id);
     },
     onViewClick(event) {
       this.$emit("view", this.$props.item.id);
