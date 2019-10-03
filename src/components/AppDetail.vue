@@ -1,25 +1,102 @@
 <template>
-  <!-- <form action> -->
-  <div class="modal-card" style="width: auto">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Login</p>
-    </header>
-    <section class="modal-card-body">
-      <b-field
-        v-for="(item, index) in items"
-        v-bind:key="index"
-        :label="item"
-        label-position="on-border"
-      >
-        <b-input type="text" v-model="env[item]" :placeholder="item" required></b-input>
-      </b-field>
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button" type="button" @click="$parent.close()">Close</button>
-      <button class="button is-primary" @click="deploy()">Login</button>
-    </footer>
+  <div class="card" style="height: 100%">
+    <div class="card-content">
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-128x128">
+            <img src="/hub/uniswap/card.jpg" />
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <h3>Uniswap</h3>
+
+            <p>
+              Uniswap is a protocol for automated token exchange on Ethereum.
+              A simple smart contract interface for swapping ERC20 tokens
+              A formalized model for pooling liquidity reserves
+              An open source frontend interface for traders and liquidity providers
+              A commitment to free and decentralized asset exchange
+            </p>
+          </div>
+        </div>
+        <div class="media-right">
+          <b-button type="is-text" size="is-large" icon-left="heart" @click="onViewClick"></b-button>
+        </div>
+      </article>
+    </div>
+    <div style="position:relative">
+      <b-tabs type="is-boxed" v-model="activeTab">
+        <b-tab-item label="Info" icon="information">
+          <div class="b-table">
+            <div class="table-wrapper">
+              <table class="table has-mobile-cards">
+                <tbody>
+                  <tr>
+                    <td class="strong">Website</td>
+                    <td>
+                      <a href="https://uniswap.io/" target="_blank">https://uniswap.io/</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="strong">Network</td>
+                    <td>
+                      <b-taglist>
+                        <b-tag type="is-primary">Matic</b-tag>
+                        <b-tag type="is-primary">Ganache</b-tag>
+                        <b-tag type="is-info">Rinkeby</b-tag>
+                        <b-tag type="is-info">Ropsten</b-tag>
+                        <b-tag type="is-warning">Poa</b-tag>
+                        <b-tag type="is-danger">Mainnet</b-tag>
+                      </b-taglist>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="strong">Contributor</td>
+                    <td>
+                      <b-tag>Community</b-tag>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="strong">Version</td>
+                    <td>
+                      <b-taglist>
+                        <b-tag type="is-primary">latest</b-tag>
+                      </b-taglist>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="strong">Updated</td>
+                    <td>
+                      <b-tag type="is-primary">03/10/2019</b-tag>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </b-tab-item>
+        <b-tab-item label="Deploy" icon="download">
+          <b-field v-for="(item, index) in items" v-bind:key="index" horizontal>
+            <template slot="label">
+              {{ item }}
+              <b-tooltip type="is-dark" label="Help text here for explanation">
+                <b-icon size="is-small" icon="help-circle-outline"></b-icon>
+              </b-tooltip>
+            </template>
+            <b-input type="text" v-model="env[item]" :placeholder="item" required></b-input>
+          </b-field>
+          <b-field horizontal>
+            <p class="control">
+              <button class="button is-primary" @click="deploy()">Deploy</button>
+            </p>
+          </b-field>
+        </b-tab-item>
+        <b-tab-item label="Instance" icon="briefcase"></b-tab-item>
+      </b-tabs>
+      <b-loading :is-full-page="false" :active.sync="isDeploying"></b-loading>
+    </div>
   </div>
-  <!-- </form> -->
 </template>
 
 <script>
@@ -100,6 +177,8 @@ export default {
     return {
       items: [],
       env: {},
+      activeTab: 1,
+      isDeploying: false,
       me: null
     };
   },
@@ -108,7 +187,7 @@ export default {
   },
   methods: {
     getDataFromApi() {
-      this.$axios.get("/hub/monkeyfile").then(response => {
+      this.$axios.get("/hub/erc20/monkeyfile").then(response => {
         this.me = new MonkeyEngine(response.data);
         this.me.parse();
         this.items = this.me.params;
@@ -116,8 +195,19 @@ export default {
       });
     },
     async deploy() {
+      this.activeTab = 2;
+      this.isDeploying = true;
       await this.me.deploy();
+      this.isDeploying = false;
     }
   }
 };
 </script>
+
+<style>
+.strong {
+  font-weight: bold;
+  width: 200px;
+}
+</style>
+
