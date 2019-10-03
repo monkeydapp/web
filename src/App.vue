@@ -1,6 +1,5 @@
 <template>
   <section>
-    <!-- <NavBar /> -->
     <div class="container is-fluid" id="app">
       <div class="columns">
         <div class="column is-one-third">
@@ -67,14 +66,12 @@
 </template>
 
 <script>
-import NavBar from "./components/NavBar.vue";
 import AppItem from "./components/AppItem.vue";
 import AppDetail from "./components/AppDetail.vue";
 
 export default {
   name: "app",
   components: {
-    NavBar,
     AppItem,
     AppDetail
   },

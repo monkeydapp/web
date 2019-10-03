@@ -34,8 +34,6 @@
 </template>
 
 <script>
-import AppDetail from "./AppDetail.vue";
-
 export default {
   name: "AppItem",
   props: {
@@ -45,7 +43,7 @@ export default {
     getImgUrl() {
       return `/hub/${this.$props.item.id}/card.jpg`;
     },
-    onViewClick(event) {
+    onViewClick() {
       this.$emit("view", this.$props.item.id);
     }
   }
