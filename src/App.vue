@@ -4,19 +4,26 @@
     <div class="container is-fluid" id="app">
       <div class="columns">
         <div class="column is-one-third">
-          <b-field label="RPC Server">
-            <b-input v-model="rpcServer" required></b-input>
-          </b-field>
-          <b-field label="Private key">
-            <b-input type="password" v-model="privateKey" required password-reveal></b-input>
-          </b-field>
-          <button @click="check()" class="button is-primary">Check</button>
-          <br />
-          <br />
+          <div class="sticky">
+            <figure class="image">
+              <img src="/logo.jpg" alt="Placeholder image" />
+            </figure>
+            <br />
+            <br />
+            <b-field label="RPC Server">
+              <b-input v-model="rpcServer" required></b-input>
+            </b-field>
+            <b-field label="Private key">
+              <b-input type="password" v-model="privateKey" required password-reveal></b-input>
+            </b-field>
+            <button @click="check()" class="button is-primary">Check</button>
+            <br />
+            <br />
 
-          <b-field label="Log">
-            <b-input v-model="logs" type="textarea"></b-input>
-          </b-field>
+            <b-field label="Log">
+              <b-input v-model="logs" type="textarea"></b-input>
+            </b-field>
+          </div>
         </div>
         <div class="column">
           <b-tabs position="is-centered" class="block">
@@ -88,6 +95,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 32px;
+  /* padding-top: 32px; */
+}
+.sticky {
+  position: sticky;
+  top: 30px;
 }
 </style>
