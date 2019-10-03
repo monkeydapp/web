@@ -22,29 +22,5 @@
     "name": "Kyber Network",
     "desc": "Kyber is an on-chain liquidity protocol that aggregates liquidity from a wide range of reserves, powering instant and secure token exchange in any decentralized application.",
     "status": "Coming soon"
-  },
-  {
-    "id": "erc20",
-    "name": "ERC-20",
-    "desc": "ERC-20 is a technical standard used for smart contracts on the Ethereum blockchain for implementing tokens",
-    "status": "Available"
-  },
-  {
-    "id": "erc721",
-    "name": "ERC-721",
-    "desc": "ERC721 tokens, more commonly referred to as Non-Fungible tokens (NFTs) ",
-    "status": "Available"
-  },
-  {
-    "id": "uniswap",
-    "name": "Uniswap",
-    "desc": "Uniswap is a protocol for automated token exchange on Ethereum.",
-    "status": "Available"
-  },
-  {
-    "id": "kyber",
-    "name": "Kyber Network",
-    "desc": "Kyber is an on-chain liquidity protocol that aggregates liquidity from a wide range of reserves, powering instant and secure token exchange in any decentralized application.",
-    "status": "Coming soon"
   }
 ]

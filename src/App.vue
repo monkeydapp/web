@@ -28,13 +28,28 @@
         <div class="column">
           <b-tabs position="is-centered" class="block">
             <b-tab-item label="All">
-              <AppItem v-for="(item, index) in items" v-bind:key="index" :item="item" />
+              <AppItem
+                v-for="(item, index) in items"
+                v-bind:key="index"
+                :item="item"
+                @liked="onLikeClick"
+              />
             </b-tab-item>
-            <b-tab-item label="Basic">
-              <AppItem v-for="(item, index) in items" v-bind:key="index" :item="item" />
+            <b-tab-item label="Liked">
+              <AppItem
+                v-for="(item, index) in likedItems"
+                v-bind:key="index"
+                :item="item"
+                @liked="onLikeClick"
+              />
             </b-tab-item>
-            <b-tab-item label="Popular">
-              <AppItem v-for="(item, index) in items" v-bind:key="index" :item="item" />
+            <b-tab-item label="Installed">
+              <AppItem
+                v-for="(item, index) in installedItems"
+                v-bind:key="index"
+                :item="item"
+                @liked="onLikeClick"
+              />
             </b-tab-item>
           </b-tabs>
         </div>
@@ -56,11 +71,27 @@ export default {
   data() {
     return {
       items: [],
+      liked: [],
+      installed: [],
       logs: "",
       rpcServer: "http://127.0.0.1:7545",
       privateKey:
         "0xcc90ad96b5bac509225d6d429e030428b90777c73c6b958826933d489b6c8f9b"
     };
+  },
+  computed: {
+    likedItems: function() {
+      let that = this;
+      return this.items.filter(function(item) {
+        return that.liked.includes(item.id);
+      });
+    },
+    installedItems: function() {
+      let that = this;
+      return this.items.filter(function(item) {
+        return that.installed.includes(item.id);
+      });
+    }
   },
   created() {
     this.getDataFromApi();
@@ -70,6 +101,16 @@ export default {
       this.$axios.get("/hub/list.json").then(response => {
         this.items = response.data;
       });
+    },
+    onLikeClick(value) {
+      if (this.liked.includes(value)) {
+        var index = this.liked.indexOf(value);
+        if (index > -1) {
+          this.liked.splice(index, 1);
+        }
+      } else {
+        this.liked.push(value);
+      }
     },
     check() {
       const Web3 = require("web3");
@@ -95,10 +136,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  /* padding-top: 32px; */
+  padding-top: 32px;
 }
 .sticky {
   position: sticky;
-  top: 30px;
 }
 </style>

@@ -16,17 +16,7 @@
       </div>
       <nav class="level is-mobile">
         <div class="level-left">
-          <a class="level-item">
-            <span class="icon is-small">
-              <i class="fas fa-reply"></i>
-            </span>
-          </a>
-          <a class="level-item">
-            <span class="icon is-small">
-              <i class="fas fa-retweet"></i>
-            </span>
-          </a>
-          <a class="level-item">
+          <a class="level-item" @click="onLikeClick">
             <span class="icon is-small">
               <i class="fas fa-heart"></i>
             </span>
@@ -59,6 +49,9 @@ export default {
         hasModalCard: true,
         width: "100%"
       });
+    },
+    onLikeClick(event) {
+      this.$emit("liked", this.$props.item.id);
     }
   }
 };
