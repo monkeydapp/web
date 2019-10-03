@@ -9,7 +9,8 @@
       <div class="content">
         <p>
           <strong>{{ item.name }}</strong>
-          <small>@hub/{{ item.id }}</small>
+          <!-- <small>@hub/{{ item.id }}</small> -->
+          <b-tag>Community</b-tag>
           <br />
           {{ item.desc }}
         </p>
@@ -21,6 +22,14 @@
               <i class="fas fa-heart"></i>
             </span>
           </a>
+          <b-taglist>
+            <b-tag type="is-primary">Matic</b-tag>
+            <b-tag type="is-primary">Ganache</b-tag>
+            <b-tag type="is-info">Rinkeby</b-tag>
+            <b-tag type="is-info">Ropsten</b-tag>
+            <b-tag type="is-warning">Poa</b-tag>
+            <b-tag type="is-danger">Mainnet</b-tag>
+          </b-taglist>
         </div>
       </nav>
     </div>
