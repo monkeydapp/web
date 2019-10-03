@@ -26,16 +26,17 @@
           </div>
         </div>
         <div class="column">
-          <b-tabs position="is-centered" class="block">
-            <b-tab-item label="All">
+          <b-tabs type="is-boxed" class="block">
+            <b-tab-item label="All" icon="view-list">
               <AppItem
                 v-for="(item, index) in items"
                 v-bind:key="index"
                 :item="item"
                 @liked="onLikeClick"
+                @view="onViewClick"
               />
             </b-tab-item>
-            <b-tab-item label="Liked">
+            <b-tab-item label="Favourite" icon="heart" :disabled="!liked.length">
               <AppItem
                 v-for="(item, index) in likedItems"
                 v-bind:key="index"
@@ -43,7 +44,7 @@
                 @liked="onLikeClick"
               />
             </b-tab-item>
-            <b-tab-item label="Installed">
+            <b-tab-item label="Installed" icon="download" :disabled="!installed.length">
               <AppItem
                 v-for="(item, index) in installedItems"
                 v-bind:key="index"
@@ -55,6 +56,48 @@
         </div>
       </div>
     </div>
+
+    <b-modal :active.sync="isViewModalActive" width="90%">
+      <div class="card" style="height: 600px">
+        <b-tabs type="is-boxed">
+          <b-tab-item label="Info" icon="google-photos">
+            <article class="media">
+              <figure class="media-left">
+                <p class="image is-128x128">
+                  <img src="/hub/uniswap/card.jpg" />
+                </p>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <strong>Uniswaqp</strong>
+                    <b-tag>Community</b-tag>
+                    <br />Kyber is an on-chain liquidity protocol that aggregates liquidity from a wide range of reserves, powering instant and secure token exchange in any decentralized application.
+                  </p>
+                </div>
+                <nav class="level is-mobile">
+                  <div class="level-left">
+                    <b-taglist>
+                      <b-tag type="is-primary">Matic</b-tag>
+                      <b-tag type="is-primary">Ganache</b-tag>
+                      <b-tag type="is-info">Rinkeby</b-tag>
+                      <b-tag type="is-info">Ropsten</b-tag>
+                      <b-tag type="is-warning">Poa</b-tag>
+                      <b-tag type="is-danger">Mainnet</b-tag>
+                    </b-taglist>
+                  </div>
+                </nav>
+              </div>
+              <div class="media-right">
+                <b-button type="is-link" size="is-medium" icon-left="download" @click="onViewClick"></b-button>
+              </div>
+            </article>
+          </b-tab-item>
+          <b-tab-item label="Deploy" icon="library-music"></b-tab-item>
+          <b-tab-item label="Instance" icon="video"></b-tab-item>
+        </b-tabs>
+      </div>
+    </b-modal>
   </section>
 </template>
 
@@ -70,6 +113,7 @@ export default {
   },
   data() {
     return {
+      isViewModalActive: true,
       items: [],
       liked: [],
       installed: [],
@@ -111,6 +155,9 @@ export default {
       } else {
         this.liked.push(value);
       }
+    },
+    onViewClick(value) {
+      this.isViewModalActive = true;
     },
     check() {
       const Web3 = require("web3");

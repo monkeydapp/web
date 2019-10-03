@@ -34,7 +34,7 @@
       </nav>
     </div>
     <div class="media-right">
-      <b-button type="is-link" size="is-medium" icon-left="download" @click="cardModal()"></b-button>
+      <b-button type="is-link" size="is-medium" icon-left="download" @click="onViewClick"></b-button>
     </div>
   </article>
 </template>
@@ -61,6 +61,9 @@ export default {
     },
     onLikeClick(event) {
       this.$emit("liked", this.$props.item.id);
+    },
+    onViewClick(event) {
+      this.$emit("view", this.$props.item.id);
     }
   }
 };
