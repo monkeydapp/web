@@ -37,12 +37,12 @@
                     <td class="strong">Network</td>
                     <td>
                       <b-taglist>
-                        <b-tag type="is-primary">Matic</b-tag>
-                        <b-tag type="is-primary">Ganache</b-tag>
+                        <b-tag type="is-info">Matic</b-tag>
+                        <b-tag type="is-info">Ganache</b-tag>
                         <b-tag type="is-info">Rinkeby</b-tag>
                         <b-tag type="is-info">Ropsten</b-tag>
-                        <b-tag type="is-warning">Poa</b-tag>
-                        <b-tag type="is-danger">Mainnet</b-tag>
+                        <b-tag>Poa</b-tag>
+                        <b-tag>Mainnet</b-tag>
                       </b-taglist>
                     </td>
                   </tr>
@@ -56,14 +56,14 @@
                     <td class="strong">Version</td>
                     <td>
                       <b-taglist>
-                        <b-tag type="is-primary">latest</b-tag>
+                        <b-tag type="is-info">latest</b-tag>
                       </b-taglist>
                     </td>
                   </tr>
                   <tr>
                     <td class="strong">Updated</td>
                     <td>
-                      <b-tag type="is-primary">03/10/2019</b-tag>
+                      <b-tag type="is-info">03/10/2019</b-tag>
                     </td>
                   </tr>
                 </tbody>

@@ -2,10 +2,13 @@
   <section>
     <div class="container is-fluid" id="app">
       <div class="columns">
-        <div class="column is-one-third">
+        <div
+          class="column is-one-third"
+          style="background-image: linear-gradient(#eceaea, #ffffff); background-attachment: fixed;"
+        >
           <div class="sticky">
             <figure class="image" style="padding-top: 30px">
-              <img src="/logo.jpg" alt="Placeholder image" />
+              <img src="@/assets/logo_2.png" alt="Placeholder image" />
             </figure>
             <b-field grouped style="margin-top: 30px">
               <b-field label="RPC Server">

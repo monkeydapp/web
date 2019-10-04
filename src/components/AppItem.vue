@@ -18,12 +18,12 @@
       <nav class="level is-mobile">
         <div class="level-left">
           <b-taglist>
-            <b-tag :type="item.available ? 'is-primary' : ''">Matic</b-tag>
-            <b-tag :type="item.available ? 'is-primary' : ''">Ganache</b-tag>
+            <b-tag :type="item.available ? 'is-info' : ''">Matic</b-tag>
+            <b-tag :type="item.available ? 'is-info' : ''">Ganache</b-tag>
             <b-tag :type="item.available ? 'is-info' : ''">Rinkeby</b-tag>
             <b-tag :type="item.available ? 'is-info' : ''">Ropsten</b-tag>
-            <b-tag :type="item.available ? 'is-warning' : ''">Poa</b-tag>
-            <b-tag :type="item.available ? 'is-danger' : ''">Mainnet</b-tag>
+            <b-tag>Poa</b-tag>
+            <b-tag>Mainnet</b-tag>
           </b-taglist>
         </div>
       </nav>
